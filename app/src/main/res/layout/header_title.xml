@@ -160,12 +160,13 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textStyle="bold" />
+
         <ProgressBar
             android:id="@+id/id_prgbar_loading"
-            android:visibility="gone"
-            android:gravity="center"
             android:layout_width="@dimen/right_btn_width"
-            android:layout_height="@dimen/right_btn_width" />
+            android:layout_height="@dimen/right_btn_width"
+            android:gravity="center"
+            android:visibility="gone" />
     </LinearLayout>
 
 </RelativeLayout>

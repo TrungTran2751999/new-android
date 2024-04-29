@@ -179,7 +179,7 @@
                     android:layout_height="@dimen/layout_120"
                     android:layout_marginTop="@dimen/layout_10"
                     android:background="@drawable/border_bg_user"
-                    android:hint="@string/tab_dichvu_dangky_capmoi_email"
+                    android:hint="CCCD"
                     android:padding="@dimen/layout_15"
                     android:textColor="@color/grey"
                     android:textColorHint="@color/grey_ori"
@@ -200,7 +200,7 @@
                 <com.customview.edittext.CustomEditText
                     android:id="@+id/id_edt_noidung"
                     android:layout_width="fill_parent"
-                    android:layout_height="@dimen/layout_120"
+                    android:layout_height="66dp"
                     android:layout_marginTop="@dimen/layout_10"
                     android:background="@drawable/border_bg_user"
                     android:hint="@string/tab_dichvu_dangky_capmoi_ndungycau"
@@ -208,7 +208,22 @@
                     android:textColor="@color/grey"
                     android:textColorHint="@color/grey_ori"
                     android:textSize="@dimen/layout_45" />
-            <LinearLayout
+
+                <com.customview.edittext.CustomEditText
+                    android:id="@+id/id_loai_suco"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_120"
+                    android:layout_marginTop="@dimen/layout_10"
+                    android:background="@drawable/border_bg_user"
+                    android:clickable="false"
+                    android:enabled="true"
+                    android:hint="Loại sự cố*"
+                    android:padding="@dimen/layout_15"
+                    android:textColor="@color/grey"
+                    android:textColorHint="@color/grey_ori"
+                    android:textSize="@dimen/layout_45" />
+
+                <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="horizontal">

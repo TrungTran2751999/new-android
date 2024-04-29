@@ -1,10 +1,15 @@
 package com.huewaco.cskh.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.support.annotation.Nullable;
 //import android.support.v4.app.FragmentTransaction;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +27,8 @@ import com.huewaco.cskh.adapter.GridTaskAdapter;
 import com.huewaco.cskh.helper.CommonHelper;
 import com.huewaco.cskh.helper.GlobalVariable;
 import com.huewaco.cskh.objects.TaskObj;
+import com.huewaco.cskh.webservice.objects.GetThanhToanQRResponse;
+import com.huewaco.cskh.webservice.processing.ResultFromWebservice;
 
 import java.util.ArrayList;
 
@@ -29,6 +36,7 @@ import java.util.ArrayList;
 public class FTabTraCuu extends FParent implements AdapterView.OnItemClickListener {
     private GridView id_grid_task;
     private ArrayList<TaskObj> mArrTasks = new ArrayList<TaskObj>();
+    private GetThanhToanQRResponse getThanhToanQRResponse;
     private GridTaskAdapter adapter;
 
     @Override
@@ -116,10 +124,10 @@ public class FTabTraCuu extends FParent implements AdapterView.OnItemClickListen
         */
         //---
         //---6 Chuyển từ FTabDichvu
-//        TaskObj barcode = new TaskObj();
-//        barcode.setNameTask(getString(R.string.tab_dichvu_barcode));
-//        barcode.setDrawable(fpActivity.getResources().getDrawable(R.drawable.ic_barcode));
-//        mArrTasks.add(barcode);
+        TaskObj barcode = new TaskObj();
+        barcode.setNameTask(getString(R.string.tab_dichvu_barcode));
+        barcode.setDrawable(fpActivity.getResources().getDrawable(R.drawable.ic_barcode));
+        mArrTasks.add(barcode);
 
         adapter = new GridTaskAdapter(fpActivity, mArrTasks);
         id_grid_task.setAdapter(adapter);
@@ -236,26 +244,76 @@ public class FTabTraCuu extends FParent implements AdapterView.OnItemClickListen
         }*/
          // Move from FTabDichVu
          else if (position == 6) {
-             barcodeShowing();
+             if(getThanhToanQRResponse==null){
+                 new GetQR().execute();
+             }else{
+                 barcodeShowing();
+             }
          }
          else {
             CommonHelper.showWarning(fpActivity, "Đang xây dựng chức năng");
         }
 
     }
+    @SuppressLint("SetTextI18n")
     private void barcodeShowing(){
-        final Dialog dialog = new Dialog(fpActivity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.dialog_barcode);
-        dialog.setTitle(R.string.app_name);
-        ImageView id_img_code128 = (ImageView) dialog.findViewById(R.id.id_img_code128);
-        String barcode = "XX"+GlobalVariable.KHACH_HANG.getMa_khang();
-        CommonHelper.showCode128(barcode, (int) fpActivity.getResources().getDimension(R.dimen.layout_750), (int) fpActivity.getResources().getDimension(R.dimen.layout_250), id_img_code128);
-        TextView tvBarcode = (TextView) dialog.findViewById(R.id.id_tv_barcode);
-        tvBarcode.setVisibility(View.GONE);
-        tvBarcode.setText(barcode);
-        dialog.show();
+        if(!getThanhToanQRResponse.Bills.isEmpty()) {
+            final Dialog dialog = new Dialog(fpActivity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.setContentView(R.layout.dialog_barcode);
+//          dialog.setTitle(R.string.app_name);
+
+            ImageView id_title_qr = dialog.findViewById(R.id.img_qr);
+            TextView id_kh = dialog.findViewById(R.id.id_kh);
+            TextView id_ten_kh = dialog.findViewById(R.id.id_ten_kh);
+            TextView id_ky_han = dialog.findViewById(R.id.id_ky_han);
+            TextView id_so_tien = dialog.findViewById(R.id.id_so_tien);
+
+            //Idkh
+            id_kh.setText(GlobalVariable.KHACH_HANG.getIdKh());
+            //ma QR
+            byte[] imgByte = Base64.decode(getThanhToanQRResponse.QrContent, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+            id_title_qr.setImageBitmap(bitmap);
+            //ten khach hang
+            id_ten_kh.setText(getThanhToanQRResponse.Infos.name);
+            //ky han
+            id_ky_han.setText(getThanhToanQRResponse.Bills.get(0).Period);
+            //So tien
+            id_so_tien.setText(CommonHelper.getStringWithSeparatorThousand(getThanhToanQRResponse.Bills.get(0).getMoney()) + " VND");
+            dialog.show();
+        }else{
+            CommonHelper.showAlertDialog(fpActivity, "Quý khách chưa đến kỳ hạn thanh toán");
+        }
+//        ImageView id_img_code128 = (ImageView) dialog.findViewById(R.id.id_img_code128);
+//        String barcode = "XX"+GlobalVariable.KHACH_HANG.getMa_khang();
+//        CommonHelper.showCode128(barcode, (int) fpActivity.getResources().getDimension(R.dimen.layout_750), (int) fpActivity.getResources().getDimension(R.dimen.layout_250), id_img_code128);
+//        TextView tvBarcode = (TextView) dialog.findViewById(R.id.id_tv_barcode);
+//        tvBarcode.setVisibility(View.GONE);
+//        tvBarcode.setText(barcode);
+    }
+    public class GetQR extends AsyncTask<String, Void, Void>{
+        @Override
+        protected void onPreExecute() {
+            showLoading();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            ResultFromWebservice rs = new ResultFromWebservice();
+            String Idkh = GlobalVariable.KHACH_HANG.getIdKh();
+            getThanhToanQRResponse = rs.getThanhToanQR(fpActivity, Idkh, fpActivity);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+            barcodeShowing();
+            disMissLoading();
+        }
     }
 }

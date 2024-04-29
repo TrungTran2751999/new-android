@@ -4,8 +4,6 @@
  **/
 package com.huewaco.cskh.helper;
 
-import static android.provider.Settings.System.getString;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,21 +33,25 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.URLUtil;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +64,6 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code128Writer;
-import com.huewaco.cskh.activity.ABaoCaoSuCo;
 import com.huewaco.cskh.activity.R;
 import com.huewaco.cskh.fragment.FParent;
 import com.huewaco.cskh.fragment.FTabTraCuu0LichGhiNuoc;
@@ -73,6 +74,7 @@ import com.huewaco.cskh.objects.DiemThuTienListItemObj;
 import com.huewaco.cskh.objects.KhachHangObj;
 import com.huewaco.cskh.objects.KhuVucListItemObj;
 import com.huewaco.cskh.objects.KhuVucObj;
+import com.huewaco.cskh.objects.LoaiSuCo;
 import com.huewaco.cskh.objects.PhuongXaListItmObj;
 import com.huewaco.cskh.objects.QuanHuyenListItemObj;
 import com.huewaco.cskh.objects.TypeDialog;
@@ -1937,6 +1939,206 @@ public class CommonHelper {
             }
         });
 
+        dialog.show();
+    }
+    public static void showDialogChatHueWaco(Context context, String linkZalo, String linkFacebook){
+        Dialog dialog = new Dialog(
+                context,
+                android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        LayoutInflater inf = LayoutInflater.from(context);
+        View layout = inf.inflate(R.layout.dialog_chat_huewaco,
+                null);
+        dialog.setContentView(layout);
+        ImageView id_zalo = layout.findViewById(R.id.id_zalo);
+        ImageView id_facebook = layout.findViewById(R.id.id_facebook);
+        id_zalo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkValidString(linkZalo)){
+                    openFile(context, linkZalo);
+                }
+            }
+        });
+        id_facebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkValidString(linkFacebook)){
+                    openFile(context, linkFacebook);
+                }
+            }
+        });
+        Window window = dialog.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams layoutParams = window.getAttributes();
+            layoutParams.gravity = Gravity.BOTTOM; // Thiết lập vị trí ở bottom
+            window.setAttributes(layoutParams);
+        }
+        // Lấy kích thước của màn hình
+        // Or getActivity() if inside a fragment
+
+        // Get the screen dimensions
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = (int) (screenWidth);
+        dialog.getWindow().setAttributes(layoutParams);
+        dialog.show();
+    }
+
+    public static void showLoaiSuCo(Context context, EditText edtLoaiSuCo){
+        Dialog dialog = new Dialog(
+                context,
+                android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
+        LayoutInflater inf = LayoutInflater.from(context);
+        View layout = inf.inflate(R.layout.dialog_loai_suco,
+                null);
+        dialog.setContentView(layout);
+        CheckBox rdbThay = layout.findViewById(R.id.rdbThay);
+        CheckBox rdbKiemTra = layout.findViewById(R.id.rdbKiemTra);
+        CheckBox rdbKiemDinh = layout.findViewById(R.id.rdbKiemDinh);
+        CheckBox rdbNangHa = layout.findViewById(R.id.rdbNangHa);
+        CheckBox rdbDoi = layout.findViewById(R.id.rdbDoi);
+        CheckBox rdbDoTim = layout.findViewById(R.id.rdbDoTim);
+
+        LinearLayout layoutEdtNangHa = layout.findViewById(R.id.layout_edt_nang_ha);
+        LinearLayout layoutEdtDoi = layout.findViewById(R.id.layout_edt_doi);
+
+        EditText edtNangHa = layout.findViewById(R.id.edt_nang_ha);
+        EditText editDoi = layout.findViewById(R.id.edt_doi);
+
+        Button btnXacNhan = layout.findViewById(R.id.btn_loai_suco);
+        //code
+
+        rdbThay.setChecked(LoaiSuCo.Thay);
+
+        rdbKiemTra.setChecked(LoaiSuCo.KiemTra);
+
+        rdbKiemDinh.setChecked(LoaiSuCo.KiemDinh);
+
+        rdbNangHa.setChecked(LoaiSuCo.NangHa);
+        layoutEdtNangHa.setVisibility(LoaiSuCo.NangHa ? View.VISIBLE : View.GONE);
+        edtNangHa.setText(String.valueOf(!LoaiSuCo.NangHa ? "0":LoaiSuCo.numberNangHa));
+
+        rdbDoi.setChecked(LoaiSuCo.Doi);
+        layoutEdtDoi.setVisibility(LoaiSuCo.Doi ? View.VISIBLE :View.GONE);
+        editDoi.setText(String.valueOf(!LoaiSuCo.Doi ? "0" :LoaiSuCo.numberDoi));
+
+        rdbDoTim.setChecked(LoaiSuCo.DoTim);
+        rdbThay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoaiSuCo.Thay = rdbThay.isChecked();
+            }
+        });
+        rdbKiemTra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoaiSuCo.KiemTra = rdbKiemTra.isChecked();
+            }
+        });
+        rdbKiemDinh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoaiSuCo.KiemDinh = rdbKiemDinh.isChecked();
+            }
+        });
+        rdbNangHa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoaiSuCo.NangHa = rdbNangHa.isChecked();
+                if(rdbNangHa.isChecked()){
+                    layoutEdtNangHa.setVisibility(View.VISIBLE);
+                }else{
+                    layoutEdtNangHa.setVisibility(View.GONE);
+                }
+            }
+        });
+        rdbDoi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoaiSuCo.Doi = rdbDoi.isChecked();
+                if(rdbDoi.isChecked()){
+                    layoutEdtDoi.setVisibility(View.VISIBLE);
+                }else{
+                    layoutEdtDoi.setVisibility(View.GONE);
+                }
+            }
+        });
+        rdbDoTim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoaiSuCo.DoTim = rdbDoTim.isChecked();
+            }
+        });
+        btnXacNhan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    String numberNangHa = edtNangHa.getText().toString().isEmpty() ? "0":edtNangHa.getText().toString();
+                    String numberDoi = editDoi.getText().toString().isEmpty() ? "0":editDoi.getText().toString();
+
+                    LoaiSuCo.numberNangHa = (Double.parseDouble(numberNangHa));
+                    LoaiSuCo.numberDoi = (Double.parseDouble(numberDoi));
+                    if(LoaiSuCo.NangHa && LoaiSuCo.numberNangHa<=0){
+                        Toast.makeText(v.getContext(), "Khoảng cách nâng(hạ) không được bỏ trống", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(LoaiSuCo.Doi && LoaiSuCo.numberDoi<=0){
+                        Toast.makeText(v.getContext(), "Khoảng cách dời không được bỏ trống", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String contentLoaiSuCo = "";
+                    if(LoaiSuCo.Thay){
+                        contentLoaiSuCo += contentLoaiSuCo.isEmpty() ? "Thay" :"-Thay";
+                    }
+                    if(LoaiSuCo.KiemTra){
+                        contentLoaiSuCo += contentLoaiSuCo.isEmpty() ? "Kiểm tra" :"-Kiểm tra";
+                    }
+                    if(LoaiSuCo.KiemDinh){
+                        contentLoaiSuCo += contentLoaiSuCo.isEmpty() ? "Kiểm định" :"-Kiểm định";
+                    }
+                    if(LoaiSuCo.NangHa){
+                        String contentNangHa = contentLoaiSuCo.isEmpty() ? "Nâng hạ: "+LoaiSuCo.numberNangHa +" m" :"-Nâng hạ: "+LoaiSuCo.numberNangHa+"m";
+                        contentLoaiSuCo += contentNangHa;
+                    }
+                    if(LoaiSuCo.Doi){
+                        String contentDoi = contentLoaiSuCo.isEmpty() ? "Dời: "+LoaiSuCo.numberDoi +" m": "-Dời: "+LoaiSuCo.numberDoi+" m";
+                        contentLoaiSuCo += contentDoi;
+                    }
+                    if(LoaiSuCo.DoTim){
+                        contentLoaiSuCo += contentLoaiSuCo.isEmpty() ? "Dò tìm" :"-Dò tìm";
+                    }
+                    edtLoaiSuCo.setText(contentLoaiSuCo);
+                    dialog.dismiss();
+                }catch (Exception e){
+                    System.out.println(e);
+                }
+            }
+        });
+        Window window = dialog.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams layoutParams = window.getAttributes();
+            layoutParams.gravity = Gravity.BOTTOM; // Thiết lập vị trí ở bottom
+            window.setAttributes(layoutParams);
+        }
+        // Lấy kích thước của màn hình
+        // Or getActivity() if inside a fragment
+
+        // Get the screen dimensions
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = (int) (screenWidth);
+        dialog.getWindow().setAttributes(layoutParams);
         dialog.show();
     }
 }

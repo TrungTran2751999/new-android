@@ -17,8 +17,8 @@ android {
         applicationId "com.huewaco.cskh.activity"
         minSdkVersion 19//17
         targetSdkVersion 33
-        versionCode 30
-        versionName "1.2.30"
+        versionCode 35
+        versionName "1.2.35"
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'

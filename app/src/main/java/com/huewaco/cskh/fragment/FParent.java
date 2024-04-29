@@ -262,7 +262,7 @@ public class FParent extends Fragment implements OnClickListener,
         } else if (classX instanceof FTabTraCuu5HDonTienNuoc) {
             showView(id_btn_left);
             id_btn_left.setBackgroundResource(R.drawable.btn_back);
-            id_btn_left.setOnClickListener(new OnClickListener() {
+            id_btn_left.setOnClickListener(new OnClickListener(){
                 @Override
                 public void onClick(View v) {
                     fpActivity.onBackPressed();

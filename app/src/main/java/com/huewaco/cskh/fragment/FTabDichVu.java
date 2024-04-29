@@ -1,15 +1,24 @@
 package com.huewaco.cskh.fragment;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 //import android.support.annotation.Nullable;
 //import android.support.v4.app.FragmentTransaction;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -18,12 +27,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.huewaco.cskh.activity.ABaoCaoSuCo;
-import com.huewaco.cskh.activity.ABaoCaoSuCo_List;
 import com.huewaco.cskh.activity.ABaoCaoSuCo_Recycler;
-import com.huewaco.cskh.activity.AGhiChiSo;
-import com.huewaco.cskh.activity.AGhiChiSoAPI;
-import com.huewaco.cskh.activity.AHuongDanSuDung;
 import com.huewaco.cskh.activity.R;
 import com.huewaco.cskh.adapter.GridTaskAdapter;
 import com.huewaco.cskh.helper.CommonHelper;
@@ -38,6 +42,7 @@ public class FTabDichVu extends FParent implements AdapterView.OnItemClickListen
     private GridView id_grid_task;
     private ArrayList<TaskObj> mArrTasks = new ArrayList<TaskObj>();
     private GridTaskAdapter adapter;
+    private String linkZalo, linkFacebook;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -73,6 +78,9 @@ public class FTabDichVu extends FParent implements AdapterView.OnItemClickListen
 
     @Override
     protected void initComponent(View v) {
+        linkZalo = getString(R.string.zalochat_link);
+        linkFacebook = getString(R.string.facebook_link);
+
         id_grid_task = (GridView) v.findViewById(R.id.id_grid_task);
         //---0
         TaskObj dkycapnuoc = new TaskObj();
@@ -137,7 +145,6 @@ public class FTabDichVu extends FParent implements AdapterView.OnItemClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             default:
                 break;
         }
@@ -182,11 +189,12 @@ public class FTabDichVu extends FParent implements AdapterView.OnItemClickListen
 
         }
         else if(position == 3){
-            //ZALO chat
-            String link = mArrTasks.get(position).getLink();
-            if(CommonHelper.checkValidString(link)){
-                CommonHelper.openFile(fpActivity,link);
-            }
+            CommonHelper.showDialogChatHueWaco(getContext(), linkZalo, linkFacebook);
+//            //ZALO chat
+//            String link = mArrTasks.get(position).getLink();
+//            if(CommonHelper.checkValidString(link)){
+//                CommonHelper.openFile(fpActivity,link);
+//            }
         }
         else if (position == 4) {
             FTabDichVuThanhToanOnline frg = new FTabDichVuThanhToanOnline();

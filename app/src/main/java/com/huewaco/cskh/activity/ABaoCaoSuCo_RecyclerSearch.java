@@ -121,9 +121,6 @@ public class ABaoCaoSuCo_RecyclerSearch extends AParent {
         initCommonView(this);
         initComponent();
         addListener();
-
-
-
     }
      void  showDataType(){
         new FilterDataTask().execute();

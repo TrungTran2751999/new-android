@@ -109,7 +109,7 @@
     <string name="tab_dichvu_yeucaunangdoido">Yêu cầu thay nâng, dời, dò tìm nước chảy</string>
     <string name="tab_dichvu_hoi_traloi">KH hỏi HueWACO trả lời</string>
     <string name="tab_dichvu_chatzalo">Chat với HueWACO</string>
-    <string name="tab_dichvu_barcode">Mã vạch thu quầy</string>
+    <string name="tab_dichvu_barcode">Mã QR thanh toán</string>
     <string name="tab_dichvu_barcode_title">Quý khách vui lòng trình mã vạch dưới đây cho nhân viên thu quầy lúc nộp tiền thay cho giấy báo tiền nước</string>
     <string name="tab_dichvu_gcs">Ghi chỉ số</string>
     <string name="tab_dichvu_bcaosuco">Báo cáo sự cố</string>
@@ -339,6 +339,7 @@
     <string name="ecpay">ECPAY</string>
     <string name="sendo">SENDO</string>
     <string name="vinid">VinID</string>
+    <string name="hues">Hue-S</string>
 
     <!--ibanking-->
     <string name="viettinib">https://www.vietinbank.vn/update/update.html</string>
@@ -365,7 +366,9 @@
     <string name="ecpay_link">https://play.google.com/store/apps/details?id=vn.ecpay.edong</string>
     <string name="sendo_link">https://play.google.com/store/apps/details?id=com.sendo</string>
     <string name="vinid_link">https://play.google.com/store/apps/details?id=com.vingroup.vinid</string>
+    <string name="hues_link">https://huecity.vn/?gd=8</string>
     <string name="zalochat_link">https://zalo.me/2635505536312269069</string>
+    <string name="facebook_link">https://www.facebook.com/HueWACO</string>
     <string name="tieude">Tiêu đề:</string>
     <string name="cauhoi">Câu hỏi:</string>
     <string name="traloi">Trả lời:</string>

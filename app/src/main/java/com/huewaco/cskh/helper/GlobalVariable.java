@@ -48,9 +48,9 @@ public class GlobalVariable {
     public static final String DEVICE_TYPE = "Android";
     public static String DEVICE_TOKEN = "";
 
-    public static final String DOMAIN = "http://huewaco.net.vn:2121/";//
+//    public static final String DOMAIN = "http://huewaco.net.vn:2121/";//
     //public static final String DOMAIN = "http://huewaco.net.vn:8012/";//
-//    public static final String DOMAIN = "http://192.168.10.88:4992/";
+    public static final String DOMAIN = "http://192.168.10.199:4992/";
 
     public static final String URL_DEVICE_TOKEN_REGISTER = DOMAIN+ "api/token/create";//"api/deviceTokens";//"api/Tokens/{idkh}/{tokenName}/{devideType}";
     public static final String URL_DEVICE__REGISTER_NOTIFICATIONRECEIVE = DOMAIN+ "api/thongbao/register-notification-receive";
@@ -183,4 +183,5 @@ public class GlobalVariable {
     public static int MAXIMAGESIZE_AI = 700;
 
     public static final String TRANGTHAI_GCS_BT = "GDH_BT";
+    public static final String QUETQR = "https://zalo.huewaco.net.vn/api/payoo/qrcode";
 }

@@ -126,6 +126,12 @@ public class FTabDichVuThanhToanQuaViDienTu extends FParent implements AdapterVi
         sendo.setLink(getString(R.string.sendo_link));
         mArrTasks.add(sendo);
 
+        //--10
+        TaskObj hues = new TaskObj();
+        hues.setNameTask(getString(R.string.hues));
+        hues.setDrawable(fpActivity.getResources().getDrawable(R.drawable.ic_hues));
+        hues.setLink(getString(R.string.hues_link));
+        mArrTasks.add(hues);
 
 
         adapter = new GridTaskAdapter(fpActivity, mArrTasks);

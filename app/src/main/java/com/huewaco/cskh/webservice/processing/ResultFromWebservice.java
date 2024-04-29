@@ -37,6 +37,7 @@ import com.huewaco.cskh.webservice.objects.GetLoginResponse;
 import com.huewaco.cskh.webservice.objects.GetResetPasswordResponse;
 import com.huewaco.cskh.webservice.objects.GetTextFromBitmapAPIResponse;
 import com.huewaco.cskh.webservice.objects.GetTextFromBitmapAPI_HWC_Response;
+import com.huewaco.cskh.webservice.objects.GetThanhToanQRResponse;
 import com.huewaco.cskh.webservice.objects.GetThongBaoAllTheoLoaiResponse;
 import com.huewaco.cskh.webservice.objects.GetThongBaoDeleteResponse;
 import com.huewaco.cskh.webservice.objects.GetThongBaoReadResponse;
@@ -60,7 +61,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -939,5 +944,21 @@ public class ResultFromWebservice {
             e.printStackTrace();
         }
         return getCheckHddtResponse;
+    }
+    public GetThanhToanQRResponse getThanhToanQR(Context context, String Idkh, AParent currentActivity){
+        GetThanhToanQRResponse getThanhToanQRResponse = null;
+        try {
+            List<NameValuePair> params = new LinkedList<NameValuePair>();
+            params.add(new BasicNameValuePair("customer_code", Idkh));
+            params.add(new BasicNameValuePair("from", null));
+            params.add(new BasicNameValuePair("to", null));
+            WebserviceProcessing WP = new WebserviceProcessing();
+            getThanhToanQRResponse = new GetThanhToanQRResponse(context, WP.doGetStringParameters(GlobalVariable.QUETQR, params), currentActivity);
+        } catch (ClientProtocolException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return getThanhToanQRResponse;
     }
 }

@@ -26,6 +26,7 @@ import com.huewaco.cskh.adapter.ListViewQuanHuyenListItemAdapter;
 import com.huewaco.cskh.helper.CommonHelper;
 import com.huewaco.cskh.helper.GlobalVariable;
 import com.huewaco.cskh.objects.KhuVucObj;
+import com.huewaco.cskh.objects.LoaiSuCo;
 import com.huewaco.cskh.objects.PhuongXaListItmObj;
 import com.huewaco.cskh.objects.QuanHuyenListItemObj;
 import com.huewaco.cskh.webservice.objects.GetDichVu0DvYeuCausResponse;
@@ -47,7 +48,7 @@ public class FTabDichVu2NangDoiDo extends FParent {
     private boolean IS_DANGKY_THANHCONG;
     private RadioButton id_rb_dv_yeucaulapdatnuoc, id_rb_dv_yeucaulapdatnuocnganhan;
     private TextView id_tv_dv_loaiyeucau,id_tv_title_maudon;
-    private CustomEditText id_edt_dv_ten_khang, id_edt_dv_so_nha, id_edt_dv_dpho, id_edt_dv_email, id_edt_dv_sdt, id_edt_noidung;
+    private CustomEditText id_edt_dv_ten_khang, id_edt_dv_so_nha, id_edt_dv_dpho, id_edt_dv_email, id_edt_dv_sdt, id_edt_noidung, id_loai_suco;
     //
     String LoaiYC, TenKH, CMND, Email, SDT, SoNha, DuongPho, MaPhuong, MaKV, NoiDung, NgayTao;
 
@@ -116,12 +117,23 @@ public class FTabDichVu2NangDoiDo extends FParent {
         id_edt_dv_email = (CustomEditText) v.findViewById(R.id.id_edt_dv_email);
         id_edt_dv_sdt = (CustomEditText) v.findViewById(R.id.id_edt_dv_sdt);
         id_edt_noidung = (CustomEditText) v.findViewById(R.id.id_edt_noidung);
+        id_loai_suco = (CustomEditText) v.findViewById(R.id.id_loai_suco);
+
         //
         id_btn_ok = (Button) v.findViewById(R.id.id_btn_close_dialog_bcsc_ng);
         // Hide Loại yêu cầu
         id_rb_dv_yeucaulapdatnuoc.setVisibility(View.GONE);
         id_rb_dv_yeucaulapdatnuocnganhan.setVisibility(View.GONE);
         id_tv_dv_loaiyeucau.setVisibility(View.GONE);
+
+        LoaiSuCo.Thay = false;
+        LoaiSuCo.KiemTra = false;
+        LoaiSuCo.KiemDinh = false;
+        LoaiSuCo.NangHa = false;
+        LoaiSuCo.Doi = false;
+        LoaiSuCo.DoTim = false;
+        LoaiSuCo.numberDoi = 0;
+        LoaiSuCo.numberNangHa = 0;
     }
 
     private void initData() {
@@ -146,7 +158,7 @@ public class FTabDichVu2NangDoiDo extends FParent {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                    MaKV =  mArrItemKhuVuc.get(arg2).getMaKv().trim();
+                MaKV = mArrItemKhuVuc.get(arg2).getMaKv().trim();
             }
 
             @Override
@@ -161,12 +173,13 @@ public class FTabDichVu2NangDoiDo extends FParent {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                if(mArrItemQuanHuyen.get(arg2).getmArrPhuongXa().size()>0){
-                    mArrItemPhuongXa  =  mArrItemQuanHuyen.get(arg2).getmArrPhuongXa();
+                if (mArrItemQuanHuyen.get(arg2).getmArrPhuongXa().size() > 0) {
+                    mArrItemPhuongXa = mArrItemQuanHuyen.get(arg2).getmArrPhuongXa();
                     adapterPhuongXa.refresh(mArrItemPhuongXa);
                     id_spn_dv_phuongxa.setSelection(0);
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
@@ -179,16 +192,24 @@ public class FTabDichVu2NangDoiDo extends FParent {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                if(mArrItemPhuongXa.size()>0){
-                    MaPhuong =  mArrItemPhuongXa.get(arg2).getMaPhuong().trim();
+                if (mArrItemPhuongXa.size() > 0) {
+                    MaPhuong = mArrItemPhuongXa.get(arg2).getMaPhuong().trim();
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
             }
         });
-        }
+        id_loai_suco.setKeyListener(null);
+        id_loai_suco.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonHelper.showLoaiSuCo(v.getContext(), id_loai_suco);
+            }
+        });
+    }
 
     @Override
     public void onClick(View v) {
@@ -198,6 +219,7 @@ public class FTabDichVu2NangDoiDo extends FParent {
                 break;
             case R.id.id_btn_close_dialog_bcsc_ng:
                 if (CommonHelper.isNetworkAvailable(fpActivity)) {
+                    if(!validateInput()) return;
                     //
                         LoaiYC = GlobalVariable.CAP_MOI_NANG_DOI;
                     //
@@ -207,13 +229,14 @@ public class FTabDichVu2NangDoiDo extends FParent {
                     SDT = id_edt_dv_sdt.getText().toString();
                     SoNha = id_edt_dv_so_nha.getText().toString();
                     DuongPho = id_edt_dv_dpho.getText().toString();
-                    NoiDung = id_edt_noidung.getText().toString();
+                    String noiDung = "Nội dung: "+id_edt_noidung.getText().toString();
+                    String loaiSuCo = "Loại yêu cầu: "+id_loai_suco.getText().toString();
+                    NoiDung = id_edt_noidung.getText().toString().isEmpty() ? loaiSuCo :noiDung + "-" +loaiSuCo;
                     //
                     new GetDichVu0DvYeuCausTask().execute();
                 } else {
                     CommonHelper.showWarning(fpActivity, getString(R.string.nointernet));
                 }
-
                 break;
             case R.id.id_btn_cancel:
                 fpActivity.onBackPressed();
@@ -222,14 +245,58 @@ public class FTabDichVu2NangDoiDo extends FParent {
                 break;
         }
     }
-
+    public boolean validateInput(){
+        String tenKh = id_edt_dv_ten_khang.getText().toString();
+        String soNha = id_edt_dv_so_nha.getText().toString();
+        String duongPho = id_edt_dv_dpho.getText().toString();
+        String CCCD = id_edt_dv_email.getText().toString();
+        String SDT = id_edt_dv_sdt.getText().toString();
+        String noiDungYC = id_edt_noidung.getText().toString();
+        String loaiSuCo = id_loai_suco.getText().toString();
+        boolean isFail = true;
+        if(tenKh.isEmpty()) {
+            id_edt_dv_ten_khang.setBackground(getResources().getDrawable(R.drawable.border_bg_red2));
+            isFail =  false;
+        }else{
+            id_edt_dv_ten_khang.setBackground(getResources().getDrawable(R.drawable.border_bg_user));
+        }
+        if(soNha.isEmpty()){
+            id_edt_dv_so_nha.setBackground(getResources().getDrawable(R.drawable.border_bg_red2));
+            isFail = false;
+        }else{
+            id_edt_dv_so_nha.setBackground(getResources().getDrawable(R.drawable.border_bg_user));
+        }
+        if(duongPho.isEmpty()){
+            id_edt_dv_dpho.setBackground(getResources().getDrawable(R.drawable.border_bg_red2));
+            isFail =  false;
+        }else{
+            id_edt_dv_dpho.setBackground(getResources().getDrawable(R.drawable.border_bg_user));
+        }
+        if(SDT.isEmpty()){
+            id_edt_dv_sdt.setBackground(getResources().getDrawable(R.drawable.border_bg_red2));
+            isFail =  false;
+        }else{
+            id_edt_dv_sdt.setBackground(getResources().getDrawable(R.drawable.border_bg_user));
+        }
+        if(loaiSuCo.isEmpty()){
+            id_loai_suco.setBackground(getResources().getDrawable(R.drawable.border_bg_red2));
+            isFail =  false;
+        }else{
+            id_loai_suco.setBackground(getResources().getDrawable(R.drawable.border_bg_user));
+        }
+        if(isFail){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public void setText() {
         id_edt_dv_ten_khang.setText(GlobalVariable.KHACH_HANG.getTenKhachHang());
         id_edt_dv_so_nha.setText(GlobalVariable.KHACH_HANG.getSoNha());
         id_edt_dv_dpho.setText(GlobalVariable.KHACH_HANG.getDuongPho());
         id_edt_dv_email.setText(GlobalVariable.KHACH_HANG.getEmail());
         id_edt_dv_sdt.setText(GlobalVariable.KHACH_HANG.getDiDong());
-        id_edt_noidung.setText("Nội dung");
+//        id_edt_noidung.setText("Nội dung");
     }
 
     //
@@ -237,7 +304,9 @@ public class FTabDichVu2NangDoiDo extends FParent {
 
         @Override
         protected void onPreExecute() {
+
             super.onPreExecute();
+            showLoading();
         }
 
         @Override
@@ -250,6 +319,7 @@ public class FTabDichVu2NangDoiDo extends FParent {
 
         @Override
         public void onPostExecute(Void result) {
+            disMissLoading();
             if (IS_DANGKY_THANHCONG) {
                 //CommonHelper.showWarning(fpActivity,"True:"+ MaKV+ ":" + MaPhuong );
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {

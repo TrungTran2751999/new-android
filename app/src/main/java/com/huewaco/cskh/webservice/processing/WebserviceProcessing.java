@@ -227,13 +227,13 @@ public class WebserviceProcessing {
         String paramString = URLEncodedUtils.format(params, "utf-8");
         url+="?"+paramString;
 
-        int timeoutConnection = 150000;
+        int timeoutConnection = 1500000000;
         HttpParams httpParameters = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-        int timeoutSocket = 50000;
+        int timeoutSocket = 500000000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
-        HttpClient httpclient = new DefaultHttpClient(httpParameters);
+        HttpClient httpclient = new DefaultHttpClient();
 
         HttpGet request = new HttpGet(url);
 
