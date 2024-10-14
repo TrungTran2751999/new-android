@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "253900024150",
+    "project_id": "huewaco-cskh-new",
+    "storage_bucket": "huewaco-cskh-new.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253900024150:android:557cd65fbd64f628050ef7",
+        "android_client_info": {
+          "package_name": "com.huewaco.cskh.activity"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgjZH498cyjxVgp4Nz6VSPRhzY4aD-lC8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

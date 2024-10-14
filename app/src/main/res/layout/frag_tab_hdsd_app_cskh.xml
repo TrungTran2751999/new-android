@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/id_fr_tab_hdsd_app_cskh"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/transparent_tab"
+        android:orientation="vertical">
+
+        <include layout="@layout/header_title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <WebView
+                android:id="@+id/web_view_hdsd"
+                android:layout_width="match_parent"
+                android:layout_height="615dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/id_btn_tb"
+                    android:layout_width="209dp"
+                    android:layout_height="wrap_content"
+                    android:text="THÔNG BÁO" />
+
+                <Button
+                    android:id="@+id/id_btn_tra_cuu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TRA CỨU" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/id_btn_dich_vu"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="DỊCH VỤ" />
+
+                <Button
+                    android:id="@+id/id_btn_tien_ich"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TIỆN ÍCH" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_30"
+            android:background="@drawable/border_bg_white"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/layout_30"
+                android:layout_marginTop="@dimen/layout_30"
+                android:gravity="left"
+                android:text="@string/lichghinuoc_chon_makh"
+                android:textAllCaps="false"
+                android:textColor="@color/header"
+                android:textSize="@dimen/textSize45" />
+
+            <Spinner
+                android:id="@+id/id_spn_khach_hang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_30"
+                android:layout_marginTop="@dimen/layout_40"></Spinner>
+
+
+            <Button
+                android:id="@+id/id_btn_timkiem"
+                android:layout_width="@dimen/layout_400"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/layout_30"
+                android:background="@drawable/border_bg_blue"
+                android:text="@string/lichghinuoc_btn_search"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSize40"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
